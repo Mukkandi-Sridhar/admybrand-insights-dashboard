@@ -1,7 +1,8 @@
 'use client';
 
-import { BarChart3, TrendingUp, RefreshCw, Download, Settings, Bell } from 'lucide-react';
+import { BarChart3, TrendingUp, RefreshCw, Settings, Bell, Share2 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { ExportDialog } from './export-dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
@@ -9,9 +10,10 @@ import { motion } from 'framer-motion';
 interface DashboardHeaderProps {
   onRefresh?: () => void;
   refreshing?: boolean;
+  onExport?: (format: 'csv' | 'pdf' | 'excel', options: any) => void;
 }
 
-export function DashboardHeader({ onRefresh, refreshing }: DashboardHeaderProps) {
+export function DashboardHeader({ onRefresh, refreshing, onExport }: DashboardHeaderProps) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
       <div className="flex items-center gap-4">
@@ -55,9 +57,15 @@ export function DashboardHeader({ onRefresh, refreshing }: DashboardHeaderProps)
             <span className="hidden sm:inline ml-2">Refresh</span>
           </Button>
           
+          {onExport && (
+            <div className="hidden sm:block">
+              <ExportDialog onExport={onExport} />
+            </div>
+          )}
+          
           <Button variant="outline" size="sm" className="hidden sm:flex">
-            <Download className="w-4 h-4" />
-            <span className="ml-2">Export</span>
+            <Share2 className="w-4 h-4" />
+            <span className="ml-2">Share</span>
           </Button>
           
           <Button variant="outline" size="sm" className="relative">

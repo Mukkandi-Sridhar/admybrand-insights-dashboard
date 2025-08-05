@@ -5,31 +5,39 @@ import { Button } from '@/components/ui/button';
 import { Plus, Upload, Download, Settings, Zap, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function QuickActions() {
+interface QuickActionsProps {
+  onAction: (action: string) => void;
+}
+
+export function QuickActions({ onAction }: QuickActionsProps) {
   const actions = [
     {
       icon: Plus,
       label: 'New Campaign',
       description: 'Create campaign',
-      color: 'from-blue-500 to-blue-600'
+      color: 'from-blue-500 to-blue-600',
+      action: 'Create New Campaign'
     },
     {
       icon: Upload,
       label: 'Import Data',
       description: 'Upload CSV',
-      color: 'from-green-500 to-green-600'
+      color: 'from-green-500 to-green-600',
+      action: 'Import Data'
     },
     {
       icon: Target,
       label: 'Set Goals',
       description: 'Define targets',
-      color: 'from-purple-500 to-purple-600'
+      color: 'from-purple-500 to-purple-600',
+      action: 'Set Goals'
     },
     {
       icon: Zap,
       label: 'Optimize',
       description: 'Auto-optimize',
-      color: 'from-orange-500 to-orange-600'
+      color: 'from-orange-500 to-orange-600',
+      action: 'Auto Optimize'
     }
   ];
 
@@ -51,6 +59,7 @@ export function QuickActions() {
               <Button
                 variant="ghost"
                 className="w-full justify-start h-auto p-3 hover:bg-muted/50 transition-all duration-200 group"
+                onClick={() => onAction(action.action)}
               >
                 <div className={`p-2 rounded-lg bg-gradient-to-br ${action.color} mr-3 group-hover:scale-110 transition-transform`}>
                   <Icon className="w-4 h-4 text-white" />

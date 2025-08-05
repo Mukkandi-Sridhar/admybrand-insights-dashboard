@@ -55,6 +55,7 @@ interface Campaign {
 
 interface CampaignsTableProps {
   campaigns: Campaign[];
+  onCampaignAction: (campaignId: string, action: string) => void;
 }
 
 type SortKey = keyof Campaign;
@@ -82,7 +83,7 @@ const getStatusColor = (status: string) => {
   return colors[status] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
 };
 
-export function CampaignsTable({ campaigns }: CampaignsTableProps) {
+export function CampaignsTable({ campaigns, onCampaignAction }: CampaignsTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [channelFilter, setChannelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -352,12 +353,16 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
                           {campaign.status === 'active' ? (
                             <>
                               <Pause className="w-4 h-4 mr-2" />
-                              Pause Campaign
+                              <span onClick={() => onCampaignAction(campaign.id, 'pause')}>
+                                Pause Campaign
+                              </span>
                             </>
                           ) : (
                             <>
                               <Play className="w-4 h-4 mr-2" />
-                              Resume Campaign
+                              <span onClick={() => onCampaignAction(campaign.id, 'resume')}>
+                                Resume Campaign
+                              </span>
                             </>
                           )}
                         </DropdownMenuItem>

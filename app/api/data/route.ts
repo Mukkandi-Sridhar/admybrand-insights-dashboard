@@ -184,12 +184,52 @@ const dashboardData = {
       timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
       severity: 'success' as const
     }
+  ],
+  notifications: [
+    {
+      id: '1',
+      title: 'Campaign Performance Alert',
+      message: 'Summer Sale Campaign is performing 25% above target',
+      type: 'success' as const,
+      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+      read: false
+    },
+    {
+      id: '2',
+      title: 'Budget Threshold Warning',
+      message: 'Video Marketing campaign has used 85% of monthly budget',
+      type: 'warning' as const,
+      timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+      read: false
+    },
+    {
+      id: '3',
+      title: 'New Feature Available',
+      message: 'Advanced audience insights now available in your dashboard',
+      type: 'info' as const,
+      timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+      read: true
+    }
   ]
 };
 
 export async function GET() {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 200));
-  
-  return NextResponse.json(dashboardData);
+  try {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    return NextResponse.json(dashboardData, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch dashboard data' },
+      { status: 500 }
+    );
+  }
 }
