@@ -14,7 +14,7 @@ import { AdvancedFilters } from '@/components/dashboard/advanced-filters';
 import { ExportDialog } from '@/components/dashboard/export-dialog';
 import { NotificationCenter } from '@/components/dashboard/notification-center';
 import { BrandHeader } from '@/components/dashboard/brand-header';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
 
 interface DashboardData {
@@ -64,26 +64,26 @@ interface DashboardData {
   }>;
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
-      type: "spring",
-      stiffness: 100
-    }
-  }
+      type: 'spring',
+      stiffness: 100,
+    },
+  },
 };
 
 export default function Dashboard() {
@@ -94,7 +94,7 @@ export default function Dashboard() {
   const [filters, setFilters] = useState({
     dateRange: '30d',
     channels: [] as string[],
-    status: 'all'
+    status: 'all',
   });
 
   const fetchData = async (showRefreshing = false) => {
@@ -105,21 +105,18 @@ export default function Dashboard() {
       } else {
         setLoading(true);
       }
-      
+
       setError(null);
-      
-      // Simulate network delay for loading state
-      await new Promise(resolve => setTimeout(resolve, showRefreshing ? 800 : 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, showRefreshing ? 800 : 1500));
+
       const response = await fetch('/api/data');
-      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const dashboardData = await response.json();
       setData(dashboardData);
-      
+
       if (showRefreshing) {
         toast.success('Dashboard data updated successfully!');
       }
@@ -145,10 +142,7 @@ export default function Dashboard() {
   const handleExport = async (format: 'csv' | 'pdf' | 'excel') => {
     try {
       toast.info(`Preparing ${format.toUpperCase()} export...`);
-      
-      // Simulate export process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       toast.success(`${format.toUpperCase()} export completed successfully!`);
     } catch (error) {
       toast.error('Export failed. Please try again.');
@@ -158,29 +152,30 @@ export default function Dashboard() {
   const handleCampaignAction = async (campaignId: string, action: string) => {
     try {
       toast.info(`${action} campaign...`);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Update local data
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       if (data) {
-        const updatedCampaigns = data.campaigns.map(campaign => {
+        const updatedCampaigns = data.campaigns.map((campaign) => {
           if (campaign.id === campaignId) {
             return {
               ...campaign,
-              status: action === 'pause' ? 'paused' as const : 
-                     action === 'resume' ? 'active' as const : campaign.status
+              status:
+                action === 'pause'
+                  ? ('paused' as const)
+                  : action === 'resume'
+                  ? ('active' as const)
+                  : campaign.status,
             };
           }
           return campaign;
         });
-        
+
         setData({
           ...data,
-          campaigns: updatedCampaigns
+          campaigns: updatedCampaigns,
         });
       }
-      
+
       toast.success(`Campaign ${action}d successfully!`);
     } catch (error) {
       toast.error(`Failed to ${action} campaign. Please try again.`);
@@ -190,10 +185,7 @@ export default function Dashboard() {
   const handleQuickAction = async (action: string) => {
     try {
       toast.info(`Executing ${action}...`);
-      
-      // Simulate action
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       toast.success(`${action} completed successfully!`);
     } catch (error) {
       toast.error(`Failed to execute ${action}. Please try again.`);
@@ -217,7 +209,7 @@ export default function Dashboard() {
               {error || 'Failed to load dashboard data'}
             </p>
           </div>
-          <button 
+          <button
             onClick={() => fetchData()}
             className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
           >
@@ -231,8 +223,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
       <Toaster position="top-right" richColors />
-      
-      <motion.div 
+
+      <motion.div
         className="container mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8"
         variants={containerVariants}
         initial="hidden"
@@ -243,22 +235,15 @@ export default function Dashboard() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <DashboardHeader 
-            onRefresh={handleRefresh} 
-            refreshing={refreshing}
-            onExport={handleExport}
-          />
+          <DashboardHeader onRefresh={handleRefresh} refreshing={refreshing} onExport={handleExport} />
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <AdvancedFilters 
-            filters={filters}
-            onFiltersChange={setFilters}
-          />
+          <AdvancedFilters filters={filters} onFiltersChange={setFilters} />
         </motion.div>
-        
+
         <motion.div variants={itemVariants}>
-          <KPICards 
+          <KPICards
             revenue={data.kpis.revenue}
             users={data.kpis.users}
             conversions={data.kpis.conversions}
@@ -272,13 +257,13 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <motion.div variants={itemVariants} className="xl:col-span-3">
-            <ChartsSection 
+            <ChartsSection
               revenueData={data.charts.revenue}
               usersData={data.charts.usersByChannel}
               conversionData={data.charts.conversionMix}
             />
           </motion.div>
-          
+
           <motion.div variants={itemVariants} className="space-y-6">
             <QuickActions onAction={handleQuickAction} />
             <RecentActivity activities={data.recentActivity} />
@@ -288,12 +273,9 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <motion.div variants={itemVariants} className="lg:col-span-2">
-            <CampaignsTable 
-              campaigns={data.campaigns}
-              onCampaignAction={handleCampaignAction}
-            />
+            <CampaignsTable campaigns={data.campaigns} onCampaignAction={handleCampaignAction} />
           </motion.div>
-          
+
           <motion.div variants={itemVariants}>
             <PerformanceMetrics metrics={data.charts.performanceMetrics} />
           </motion.div>
