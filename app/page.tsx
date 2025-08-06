@@ -15,8 +15,7 @@ import { ExportDialog } from '@/components/dashboard/export-dialog';
 import { NotificationCenter } from '@/components/dashboard/notification-center';
 import { BrandHeader } from '@/components/dashboard/brand-header';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
-import { Toaster } from '@/components/ui/sonner';
+import { toast, Toaster } from 'sonner';
 
 interface DashboardData {
   kpis: {

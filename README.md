@@ -156,6 +156,18 @@ Returns comprehensive dashboard data including:
 
 ## 🚀 **Deployment**
 
+### **Vercel Deployment (Recommended)**
+1. **Connect to Vercel**:
+```bash
+npm i -g vercel
+vercel
+```
+
+2. **Or deploy via GitHub**:
+- Push to GitHub repository
+- Connect repository to Vercel
+- Automatic deployments on push
+
 ### **Static Export**
 ```bash
 npm run build
